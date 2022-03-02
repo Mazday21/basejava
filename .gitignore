@@ -2,3 +2,6 @@
 lib
 maven
 out
+lib
+.idea
+
