@@ -4,4 +4,4 @@ maven
 out
 lib
 .idea
-
+.gitignore
