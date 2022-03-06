@@ -15,7 +15,7 @@ public abstract class AbstractArrayStorageTest {
 
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
-    private static final String UUID_3 = "uuid3";
+    private static final String UUID_3 = "uuid";
 
     @Before
     public void setUp() {
