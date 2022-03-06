@@ -38,7 +38,7 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void update() {
-        Resume resume = new Resume("uuid1");
+        Resume resume = new Resume(UUID_1);
         storage.update(resume);
         assertSame(resume, storage.get(UUID_1));
     }
@@ -54,10 +54,7 @@ public abstract class AbstractArrayStorageTest {
         Resume resume1 = new Resume(UUID_1);
         Resume resume2 = new Resume(UUID_2);
         Resume resume3 = new Resume(UUID_3);
-        Resume[] resumes = new Resume[3];
-        resumes[0] = resume1;
-        resumes[1] = resume2;
-        resumes[2] = resume3;
+        Resume[] resumes = {resume1, resume2, resume3};
         assertArrayEquals(resumes, storage.getAll());
     }
 
@@ -74,10 +71,9 @@ public abstract class AbstractArrayStorageTest {
         try {
             while (storage.size() < STORAGE_LIMIT) {
                 Resume r = new Resume();
-                    storage.save(r);
+                storage.save(r);
             }
-        }
-        catch (StorageException e) {
+        } catch (StorageException e) {
             fail("Overflow ahead of time");
         }
         Resume r = new Resume();
@@ -99,8 +95,8 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void get() {
-        Resume resume = new Resume("uuid1");
-        assertEquals(resume, storage.get("uuid1"));
+        Resume resume = new Resume(UUID_1);
+        assertEquals(resume, storage.get(UUID_1));
     }
 
     @Test(expected = NotExistStorageException.class)
