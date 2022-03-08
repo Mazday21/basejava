@@ -1,7 +1,5 @@
 package ru.basejava.storage;
 
-import ru.basejava.exception.ExistStorageException;
-import ru.basejava.exception.NotExistStorageException;
 import ru.basejava.exception.StorageException;
 import ru.basejava.model.Resume;
 
@@ -25,15 +23,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         size = 0;
     }
 
-    public void update(Resume r) {
-        int index = getIndex(r.getUuid());
-        if (index < 0) {
-            throw new NotExistStorageException(r.getUuid());
-        } else {
-            storage[index] = r;
-        }
-    }
-
     /**
      * @return array, contains only Resumes in storage (without null)
      */
@@ -41,11 +30,14 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return Arrays.copyOfRange(storage, 0, size);
     }
 
-    public void save(Resume r) {
-        int index = getIndex(r.getUuid());
-        if (index >= 0) {
-            throw new ExistStorageException(r.getUuid());
-        } else if (size == STORAGE_LIMIT) {
+    @Override
+    protected void updating(Resume r, int index) {
+        storage[index] = r;
+    }
+
+    @Override
+    protected void saving(Resume r, int index) {
+        if (size >= STORAGE_LIMIT) {
             throw new StorageException("Storage overflow", r.getUuid());
         } else {
             insertElement(r, index);
@@ -53,28 +45,19 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         }
     }
 
-    public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        } else {
-            fillDeletedElement(index);
-            storage[size - 1] = null;
-            size--;
-        }
+    @Override
+    protected void deleting(int index) {
+        fillDeletedElement(index);
+        storage[size - 1] = null;
+        size--;
     }
 
-    public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        }
+    @Override
+    protected Resume getting(int index) {
         return storage[index];
     }
 
     protected abstract void fillDeletedElement(int index);
 
     protected abstract void insertElement(Resume r, int index);
-
-    protected abstract int getIndex(String uuid);
 }
