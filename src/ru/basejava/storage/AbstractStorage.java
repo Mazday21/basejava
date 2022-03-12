@@ -26,7 +26,7 @@ public abstract class AbstractStorage implements Storage {
         return getResume(getIndex(uuid));
     }
 
-    public void checkNotExist(String uuid) {
+    private void checkNotExist(String uuid) {
         if (getIndex(uuid) < 0) {
             throw new NotExistStorageException(uuid);
         }

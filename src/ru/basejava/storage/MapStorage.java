@@ -48,7 +48,7 @@ public class MapStorage extends AbstractStorage {
         return storage.get(uuid);
     }
 
-    public void checkNotExist(String uuid) {
+    private void checkNotExist(String uuid) {
         if (!storage.containsKey(uuid)) {
             throw new NotExistStorageException(uuid);
         }
