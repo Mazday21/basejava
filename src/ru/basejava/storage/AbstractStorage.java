@@ -33,7 +33,7 @@ public abstract class AbstractStorage implements Storage {
     }
 
     private void checkExist(String uuid) {
-        if (getIndex(uuid) > 0) {
+        if (getIndex(uuid) >= 0) {
             throw new ExistStorageException(uuid);
         }
     }
