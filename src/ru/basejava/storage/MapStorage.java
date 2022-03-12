@@ -1,17 +1,35 @@
 package ru.basejava.storage;
 
+import ru.basejava.exception.ExistStorageException;
+import ru.basejava.exception.NotExistStorageException;
 import ru.basejava.model.Resume;
 
 import java.util.*;
 
 public class MapStorage extends AbstractStorage {
-    private final Map<Integer, Resume> storage = new HashMap<>();
-    private int counter = 0;
+    private final Map<String, Resume> storage = new HashMap<>();
 
     @Override
     public void clear() {
         storage.clear();
-        counter = 0;
+    }
+
+    @Override
+    public void update(Resume r) {
+        checkNotExist(r.getUuid());
+        storage.put(r.getUuid(), r);
+    }
+
+    @Override
+    public void save(Resume r) {
+        checkExist(r.getUuid());
+        storage.put(r.getUuid(), r);
+    }
+
+    @Override
+    public void delete(String uuid) {
+        checkNotExist(uuid);
+        storage.remove(uuid);
     }
 
     @Override
@@ -19,39 +37,51 @@ public class MapStorage extends AbstractStorage {
         return storage.values().toArray(new Resume[0]);
     }
 
+    @Override
     public int size() {
-        return counter;
+        return storage.size();
     }
 
     @Override
-    protected int getIndex(String uuid) {
-        for (Map.Entry<Integer, Resume> entry : storage.entrySet()) {
-            if (uuid.equals(entry.getValue().getUuid())) {
-                return entry.getKey();
-            }
+    public Resume get(String uuid) {
+        checkNotExist(uuid);
+        return storage.get(uuid);
+    }
+
+    public void checkNotExist(String uuid) {
+        if (!storage.containsKey(uuid)) {
+            throw new NotExistStorageException(uuid);
         }
-        return -1;
+    }
+
+    private void checkExist(String uuid) {
+        if (storage.containsKey(uuid)) {
+            throw new ExistStorageException(uuid);
+        }
+    }
+
+    /**
+     * Unused methods
+     */
+    @Override
+    protected int getIndex(String uuid) {
+        return 0;
     }
 
     @Override
     protected void updateResume(Resume r, int index) {
-        storage.put(index, r);
     }
 
     @Override
     protected void saveResume(Resume r, int index) {
-        storage.put(counter, r);
-        counter++;
     }
 
     @Override
     protected void deleteResume(int index) {
-        storage.remove(index);
-        counter--;
     }
 
     @Override
     protected Resume getResume(int index) {
-        return storage.get(index);
+        return null;
     }
 }

@@ -7,38 +7,35 @@ import ru.basejava.model.Resume;
 public abstract class AbstractStorage implements Storage {
 
     public void update(Resume r) {
-        int index = getIndex(r.getUuid());
-        if (index < 0) {
-            throw new NotExistStorageException(r.getUuid());
-        } else {
-            updateResume(r, index);
-        }
+        checkNotExist(r.getUuid());
+        updateResume(r, getIndex(r.getUuid()));
     }
 
     public void save(Resume r) {
-        int index = getIndex(r.getUuid());
-        if (index >= 0) {
-            throw new ExistStorageException(r.getUuid());
-        } else {
-            saveResume(r, index);
-        }
+        checkExist(r.getUuid());
+        saveResume(r, getIndex(r.getUuid()));
     }
 
     public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        } else {
-            deleteResume(index);
-        }
+        checkNotExist(uuid);
+        deleteResume(getIndex(uuid));
     }
 
     public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
+        checkNotExist(uuid);
+        return getResume(getIndex(uuid));
+    }
+
+    public void checkNotExist(String uuid) {
+        if (getIndex(uuid) < 0) {
             throw new NotExistStorageException(uuid);
         }
-        return getResume(index);
+    }
+
+    private void checkExist(String uuid) {
+        if (getIndex(uuid) > 0) {
+            throw new ExistStorageException(uuid);
+        }
     }
 
     protected abstract int getIndex(String uuid);
