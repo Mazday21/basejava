@@ -3,8 +3,19 @@ package ru.basejava.storage;
 import ru.basejava.model.Resume;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
+/*
+    private static class ResumeComparator implements Comparator<Resume> {
+        @Override
+        public int compare(Resume o1, Resume o2) {
+            return o1.getUuid().compareTo(o2.getUuid());
+        }
+    }
+*/
+
+    private static final Comparator<Resume> SORTED_COMPARATOR = Comparator.comparing(Resume::getUuid);
 
     @Override
     protected void fillDeletedElement(int index) {
@@ -23,8 +34,8 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected int getIndex(String uuid) {
-        Resume searchKey = new Resume(uuid);
-        return Arrays.binarySearch(storage, 0, size, searchKey);
+    protected Integer getSearchKey(String uuid) {
+        Resume searchKey = new Resume(uuid, "FULL_NAME");
+        return Arrays.binarySearch(storage, 0, size, searchKey, SORTED_COMPARATOR);
     }
 }

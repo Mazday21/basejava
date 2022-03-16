@@ -4,11 +4,12 @@ import ru.basejava.exception.StorageException;
 import ru.basejava.model.Resume;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Array based storage for Resumes
  */
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected static final int STORAGE_LIMIT = 10000;
 
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
@@ -23,21 +24,25 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         size = 0;
     }
 
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
-    public Resume[] getAll() {
-        return Arrays.copyOfRange(storage, 0, size);
-    }
-
     @Override
-    protected void updateResume(Resume r, int index) {
+    protected void doUpdate(Resume r, Integer index) {
         storage[index] = r;
     }
 
+    /**
+     * @return array, contains only Resumes in storage (without null)
+     */
+
+    public List<Resume> getAllSorted() {
+        Resume[] temp = Arrays.copyOfRange(storage, 0, size);
+        List<Resume> list = Arrays.asList(temp);
+        list.sort(RESUME_COMPARATOR);
+        return list;
+    }
+
     @Override
-    protected void saveResume(Resume r, int index) {
-        if (size >= STORAGE_LIMIT) {
+    protected void doSave(Resume r, Integer index) {
+        if (size == STORAGE_LIMIT) {
             throw new StorageException("Storage overflow", r.getUuid());
         } else {
             insertElement(r, index);
@@ -46,18 +51,24 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void deleteResume(int index) {
+    public void doDelete(Integer index) {
         fillDeletedElement(index);
         storage[size - 1] = null;
         size--;
     }
 
-    @Override
-    protected Resume getResume(int index) {
+    public Resume doGet(Integer index) {
         return storage[index];
+    }
+
+    @Override
+    protected boolean isExist(Integer index) {
+        return index >= 0;
     }
 
     protected abstract void fillDeletedElement(int index);
 
     protected abstract void insertElement(Resume r, int index);
+
+//    protected abstract Integer getSearchKey(String uuid);
 }
