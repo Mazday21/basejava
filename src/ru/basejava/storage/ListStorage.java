@@ -49,8 +49,7 @@ public class ListStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        storage.sort(RESUME_COMPARATOR);
+    public List<Resume> getAll() {
         return storage;
     }
 

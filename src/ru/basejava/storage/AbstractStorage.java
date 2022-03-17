@@ -5,6 +5,7 @@ import ru.basejava.exception.NotExistStorageException;
 import ru.basejava.model.Resume;
 
 import java.util.Comparator;
+import java.util.List;
 
 public abstract class AbstractStorage<T> implements Storage {
     protected abstract T getSearchKey(String uuid);
@@ -18,6 +19,8 @@ public abstract class AbstractStorage<T> implements Storage {
     protected abstract Resume doGet(T searchKey);
 
     protected abstract void doDelete(T searchKey);
+
+    protected abstract List<Resume> getAll();
 
     public void update(Resume r) {
         T searchKey = getExistedSearchKey(r.getUuid());
@@ -39,6 +42,12 @@ public abstract class AbstractStorage<T> implements Storage {
         return doGet(searchKey);
     }
 
+    public List<Resume> getAllSorted() {
+        List<Resume> list = getAll();
+        list.sort(RESUME_COMPARATOR);
+        return list;
+    }
+
     private T getExistedSearchKey(String uuid) {
         T searchKey = getSearchKey(uuid);
         if (!isExist(searchKey)) {
@@ -54,4 +63,7 @@ public abstract class AbstractStorage<T> implements Storage {
         }
         return searchKey;
     }
+
+    public static Comparator<Resume> RESUME_COMPARATOR
+            = Comparator.naturalOrder();
 }
