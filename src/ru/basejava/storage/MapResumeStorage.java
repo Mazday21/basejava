@@ -21,10 +21,7 @@ public class MapResumeStorage extends AbstractStorage<Resume> {
 
     @Override
     protected Resume getSearchKey(String uuid) {
-        if (storage.containsKey(uuid)) {
             return storage.get(uuid);
-        }
-        return null;
     }
 
     @Override
@@ -39,7 +36,7 @@ public class MapResumeStorage extends AbstractStorage<Resume> {
 
     @Override
     protected Resume doGet(Resume searchKey) {
-        return storage.get(searchKey.getUuid());
+        return searchKey;
     }
 
     @Override

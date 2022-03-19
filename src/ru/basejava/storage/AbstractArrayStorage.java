@@ -34,17 +34,16 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
      */
 
     public List<Resume> getAll() {
-        return Arrays.asList(Arrays.copyOfRange(storage, 0, size));
+        return Arrays.asList(Arrays.copyOf(storage, size));
     }
 
     @Override
     protected void doSave(Resume r, Integer index) {
         if (size == STORAGE_LIMIT) {
             throw new StorageException("Storage overflow", r.getUuid());
-        } else {
-            insertElement(r, index);
-            size++;
         }
+        insertElement(r, index);
+        size++;
     }
 
     @Override
@@ -66,6 +65,4 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected abstract void fillDeletedElement(int index);
 
     protected abstract void insertElement(Resume r, int index);
-
-//    protected abstract Integer getSearchKey(String uuid);
 }
