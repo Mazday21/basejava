@@ -1,15 +1,7 @@
 package ru.basejava;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 public class MainFile {
@@ -17,21 +9,20 @@ public class MainFile {
         File f = new File(dir);
         String[] dirList = f.list();
         int i;
-        for(i = 0; i < Objects.requireNonNull(dirList).length; i++)
-        {
+        for (i = 0; i < Objects.requireNonNull(dirList).length; i++) {
             File f1 = new File(dir +
                     File.separator + dirList[i]);
 
-            if(f1.isFile())
+            if (f1.isFile())
                 System.out.println(dir +
                         File.separator + dirList[i]);
-            else
-            {
+            else {
                 list(dir +
                         File.separator + dirList[i]);
             }
         }
     }
+
     public static void main(String[] args) {
         String filePath = ".\\.gitignore";
 

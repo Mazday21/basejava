@@ -23,7 +23,7 @@ public abstract class AbstractStorage<T> implements Storage {
 
     protected abstract void doDelete(T searchKey);
 
-    protected abstract List<Resume> getAll();
+    protected abstract List<Resume> doCopyAll();
 
     public void update(Resume r) {
         LOG.info("Update " + r);
@@ -51,7 +51,7 @@ public abstract class AbstractStorage<T> implements Storage {
 
     public List<Resume> getAllSorted() {
         LOG.info("getAllSorted");
-        List<Resume> list = getAll();
+        List<Resume> list = doCopyAll();
         list.sort(RESUME_COMPARATOR);
         return list;
     }
