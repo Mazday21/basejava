@@ -6,6 +6,8 @@ import ru.basejava.exception.ExistStorageException;
 import ru.basejava.exception.NotExistStorageException;
 import ru.basejava.model.*;
 
+import java.io.File;
+import java.lang.reflect.Field;
 import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
@@ -14,15 +16,17 @@ import static org.junit.Assert.*;
 import static ru.basejava.storage.AbstractStorage.RESUME_COMPARATOR;
 
 public abstract class AbstractStorageTest {
+    protected static final File STORAGE_DIR = new File("C:\\123\\basejava\\Storage");
+
     protected final Storage storage;
 
     protected static final String UUID_1 = "uuid1";
     protected static final String UUID_2 = "uuid2";
     protected static final String UUID_3 = "uuid3";
 
-    protected static final String FULL_NAME_1 = "ABC1";
-    protected static final String FULL_NAME_2 = "ABC2";
-    protected static final String FULL_NAME_3 = "ABC3";
+    protected static final String FULL_NAME_1 = "Name1";
+    protected static final String FULL_NAME_2 = "Name2";
+    protected static final String FULL_NAME_3 = "Name3";
 
     protected static final Resume R1;
     protected static final Resume R2;
@@ -86,7 +90,7 @@ public abstract class AbstractStorageTest {
     public void update() {
         Resume resume = new Resume(UUID_1, "Update");
         storage.update(resume);
-        assertSame(resume, storage.get(UUID_1));
+        assertEquals(resume, storage.get(UUID_1));
     }
 
     @Test(expected = NotExistStorageException.class)
