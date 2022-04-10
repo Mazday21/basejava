@@ -25,7 +25,7 @@ public class MainFile {
 
     public static void main(String[] args) {
         String filePath = ".\\.gitignore";
-
+        System.out.println();
         File file = new File(filePath);
         try {
             System.out.println(file.getCanonicalPath());
